@@ -36,3 +36,11 @@ app.use('/api/cf-champion-map', require('./routes/cf-champion-map'));
 app.use('/api/cf-security-questionnaires', require('./routes/cf-security-questionnaires'));
 app.use('/api/cf-msa-redlines', require('./routes/cf-msa-redlines'));
 app.use('/api/cf-pilot-scorecards', require('./routes/cf-pilot-scorecards'));
+
+// Deep features (2026-05-14) — DB-backed feature modules
+app.use('/api/deep-msa-redlines', require('./routes/deep-msa-redlines'));
+app.use('/api/deep-security-questionnaires', require('./routes/deep-security-questionnaires'));
+app.use('/api/deep-champion-map', require('./routes/deep-champion-map'));
+app.use('/api/deep-procurement-playbook', require('./routes/deep-procurement-playbook'));
+app.use('/api/deep-pilot-scorecards', require('./routes/deep-pilot-scorecards'));
+app.use('/api/deep-compliance-posture', require('./routes/deep-compliance-posture'));
