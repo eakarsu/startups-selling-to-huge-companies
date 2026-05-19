@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard, Scale, ShieldCheck, Network, ClipboardList, Award, ShieldHalf } from 'lucide-react';
+import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard, Scale, ShieldCheck, Network, ClipboardList, Award, ShieldHalf, LayoutGrid } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -59,6 +59,10 @@ export default function Layout() {
             <NavLink to="/ai-center" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white' : 'text-violet-400 hover:text-white hover:bg-gray-800'}`}>
               <Sparkles className="w-4 h-4" />
               AI Center
+            </NavLink>
+            <NavLink to="/custom-views" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mt-1 ${isActive ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white' : 'text-indigo-400 hover:text-white hover:bg-gray-800'}`}>
+              <LayoutGrid className="w-4 h-4" />
+              Enterprise Views
             </NavLink>
           </div>
           <div className="pt-4 mt-4 border-t border-gray-800">

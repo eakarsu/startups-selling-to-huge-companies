@@ -19,6 +19,7 @@ import ChampionMapPage from './pages/ChampionMapPage';
 import ProcurementPlaybookPage from './pages/ProcurementPlaybookPage';
 import PilotScorecardsPage from './pages/PilotScorecardsPage';
 import CompliancePosturePage from './pages/CompliancePosturePage';
+import CustomViewsPage from './pages/CustomViewsPage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="procurement-playbook" element={<ProcurementPlaybookPage />} />
           <Route path="pilot-scorecards" element={<PilotScorecardsPage />} />
           <Route path="compliance-posture" element={<CompliancePosturePage />} />
+          <Route path="custom-views" element={<CustomViewsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

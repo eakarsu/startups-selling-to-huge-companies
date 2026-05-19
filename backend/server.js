@@ -44,3 +44,12 @@ app.use('/api/deep-champion-map', require('./routes/deep-champion-map'));
 app.use('/api/deep-procurement-playbook', require('./routes/deep-procurement-playbook'));
 app.use('/api/deep-pilot-scorecards', require('./routes/deep-pilot-scorecards'));
 app.use('/api/deep-compliance-posture', require('./routes/deep-compliance-posture'));
+
+// Health probe (no auth)
+app.get('/api/health', (_req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
+
+// Custom Views — MUST be mounted BEFORE the 404 handler
+app.use('/api/custom-views', require('./routes/customViews'));
+
+// 404 fallback for unmatched /api routes
+app.use('/api', (req, res) => res.status(404).json({ error: 'Not Found', path: req.originalUrl }));
