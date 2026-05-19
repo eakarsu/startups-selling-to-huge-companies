@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard } from 'lucide-react';
+import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard, Scale, ShieldCheck, Network, ClipboardList, Award, ShieldHalf, LayoutGrid } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -13,6 +13,15 @@ const navItems = [
   { to: '/export', icon: FileSpreadsheet, label: 'CSV Export' },
   { to: '/audit', icon: ScrollText, label: 'Audit Log' },
   { to: '/sample-data', icon: Database, label: 'Sample Data' },
+];
+
+const deepNavItems = [
+  { to: '/champion-map', icon: Network, label: 'Champion Map' },
+  { to: '/procurement-playbook', icon: ClipboardList, label: 'Procurement Playbook' },
+  { to: '/msa-redlines', icon: Scale, label: 'MSA Redlines' },
+  { to: '/security-questionnaires', icon: ShieldCheck, label: 'Security Questionnaires' },
+  { to: '/pilot-scorecards', icon: Award, label: 'Pilot Scorecards' },
+  { to: '/compliance-posture', icon: ShieldHalf, label: 'Compliance Posture' },
 ];
 
 export default function Layout() {
@@ -51,6 +60,19 @@ export default function Layout() {
               <Sparkles className="w-4 h-4" />
               AI Center
             </NavLink>
+            <NavLink to="/custom-views" className={({ isActive }) => `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mt-1 ${isActive ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white' : 'text-indigo-400 hover:text-white hover:bg-gray-800'}`}>
+              <LayoutGrid className="w-4 h-4" />
+              Enterprise Views
+            </NavLink>
+          </div>
+          <div className="pt-4 mt-4 border-t border-gray-800">
+            <div className="px-3 mb-2 text-xs uppercase font-bold text-gray-500 tracking-wider">F100 Deep Tools</div>
+            {deepNavItems.map(({ to, icon: Icon, label }) => (
+              <NavLink key={to} to={to} className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${isActive ? 'bg-emerald-700 text-white' : 'text-emerald-400 hover:text-white hover:bg-gray-800'}`}>
+                <Icon className="w-3.5 h-3.5" />
+                {label}
+              </NavLink>
+            ))}
           </div>
         </nav>
         <div className="p-4 border-t border-gray-800">

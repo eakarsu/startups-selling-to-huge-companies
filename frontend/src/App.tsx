@@ -13,6 +13,13 @@ import AuditLogPage from './pages/AuditLogPage';
 import ExportPage from './pages/ExportPage';
 import SampleDataPage from './pages/SampleDataPage';
 import AICenter from './components/AICenter';
+import MsaRedlinesPage from './pages/MsaRedlinesPage';
+import SecurityQuestionnairePage from './pages/SecurityQuestionnairePage';
+import ChampionMapPage from './pages/ChampionMapPage';
+import ProcurementPlaybookPage from './pages/ProcurementPlaybookPage';
+import PilotScorecardsPage from './pages/PilotScorecardsPage';
+import CompliancePosturePage from './pages/CompliancePosturePage';
+import CustomViewsPage from './pages/CustomViewsPage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
@@ -38,6 +45,13 @@ export default function App() {
           <Route path="audit" element={<AuditLogPage />} />
           <Route path="sample-data" element={<SampleDataPage />} />
           <Route path="ai-center" element={<AICenter />} />
+          <Route path="msa-redlines" element={<MsaRedlinesPage />} />
+          <Route path="security-questionnaires" element={<SecurityQuestionnairePage />} />
+          <Route path="champion-map" element={<ChampionMapPage />} />
+          <Route path="procurement-playbook" element={<ProcurementPlaybookPage />} />
+          <Route path="pilot-scorecards" element={<PilotScorecardsPage />} />
+          <Route path="compliance-posture" element={<CompliancePosturePage />} />
+          <Route path="custom-views" element={<CustomViewsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
