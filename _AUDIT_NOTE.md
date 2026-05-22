@@ -1,5 +1,75 @@
 # EnterpriseOS — Audit Note
 
+Last update: 2026-05-21
+
+## Apply pass 7 (full backlog implementation) — 2026-05-21
+
+Wired the 16 previously-orphaned audit-gap pages (11 Gap + 5 Cf) into the SPA.
+Their backend routes were already mounted (`/api/gap-ai-*`, `/api/gap-nonai-*`,
+`/api/cf-*`) and their React page components already existed under
+`frontend/src/pages/Gap*.tsx` and `frontend/src/pages/Cf*.tsx`, but they had
+no `<Route>` entries in `App.tsx` and no sidebar links — meaning the AI
+advisory backlog (Multi-Threading Coach, Procurement Decoder, Champion
+Identifier, Budget Cycle Predictor, Legal Review Automator, Calendar
+Integration advisor, Email Sync advisor, E-Sign advisor, Revenue Forecast
+roll-up advisor, Org-Chart advisor, Call Recording Ingest advisor, plus 5 Cf
+AI variants) was reachable only by typing the URL manually.
+
+Skipped: nothing — none of these endpoints return 503 (they all use the same
+OpenRouter `callAI` wrapper that degrades to a plain-text "AI unavailable"
+string when no key is present, which the page renders).
+
+### Files changed
+- `frontend/src/App.tsx` — added 16 lazy imports + 16 `<Route>` entries under
+  `/gap/<slug>` and `/cf/<slug>`.
+- `frontend/src/components/Layout.tsx` — added a collapsible "AI Advisory
+  (16)" sidebar group (collapsed by default to avoid cluttering the nav)
+  using existing lucide icons (`Wand2`, `ChevronDown`, `ChevronRight`).
+- `_AUDIT_NOTE.md` — this section.
+
+### Pages now reachable from sidebar
+Gap-AI (5): `/gap/multi-threading-coach`, `/gap/procurement-decoder`,
+`/gap/champion-identifier`, `/gap/budget-cycle-predictor`,
+`/gap/legal-review-automator`.
+Gap-NonAI (6, all are AI-advisory shims): `/gap/calendar-integration`,
+`/gap/email-sync`, `/gap/esign-integration`, `/gap/revenue-forecast`,
+`/gap/org-chart`, `/gap/call-recording`.
+Cf (5): `/cf/champion-map`, `/cf/f100-playbook`, `/cf/msa-redlines`,
+`/cf/security-questionnaires`, `/cf/pilot-scorecards`.
+
+### Endpoints already mounted (verified in `backend/server.js`)
+`POST /api/gap-ai-multi-threading-coach`,
+`POST /api/gap-ai-procurement-decoder`,
+`POST /api/gap-ai-champion-identifier`,
+`POST /api/gap-ai-budget-cycle-predictor`,
+`POST /api/gap-ai-legal-review-automator`,
+`POST /api/gap-nonai-calendar-integration`,
+`POST /api/gap-nonai-email-sync`,
+`POST /api/gap-nonai-esign-integration`,
+`POST /api/gap-nonai-revenue-forecast`,
+`POST /api/gap-nonai-org-chart`,
+`POST /api/gap-nonai-call-recording`,
+`POST /api/cf-f100-playbook`,
+`POST /api/cf-champion-map`,
+`POST /api/cf-security-questionnaires`,
+`POST /api/cf-msa-redlines`,
+`POST /api/cf-pilot-scorecards` (each plus `GET .../history`).
+
+### DB
+- `gap_features(id, feature_slug, user_id, input JSONB, output TEXT,
+  created_at)` — table is `CREATE TABLE IF NOT EXISTS`-ensured by each
+  route on first call; no schema migration needed.
+
+### Verification
+- `npx vite build` → success (1518 modules, 1.38 s).
+- `npx tsc --noEmit` → only the 6 pre-existing errors documented in earlier
+  passes (`Companies.tsx`, `DealDetail.tsx`, `Metrics.tsx`, `Pipeline.tsx`,
+  `CodexCustomVizFeature.tsx`, `TeamPage.tsx`); no new errors.
+- No backend `.js` files were edited in this pass.
+- No new npm deps; uses existing `lucide-react` icons already in bundle.
+
+---
+
 Last update: 2026-05-14
 
 ## Deep features added 2026-05-14 (branch feature/audit-implementation-2026-05-14)

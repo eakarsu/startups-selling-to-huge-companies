@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard, Scale, ShieldCheck, Network, ClipboardList, Award, ShieldHalf, LayoutGrid } from 'lucide-react';
+import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard, Scale, ShieldCheck, Network, ClipboardList, Award, ShieldHalf, LayoutGrid, ChevronDown, ChevronRight, Wand2 } from 'lucide-react';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -24,9 +25,31 @@ const deepNavItems = [
   { to: '/compliance-posture', icon: ShieldHalf, label: 'Compliance Posture' },
 ];
 
+// Apply pass 7: previously orphaned Gap (audit-gap) + Cf (custom-feature) AI advisory pages
+const gapNavItems = [
+  { to: '/gap/multi-threading-coach', label: 'Multi-Threading Coach' },
+  { to: '/gap/procurement-decoder', label: 'Procurement Decoder' },
+  { to: '/gap/champion-identifier', label: 'Champion Identifier' },
+  { to: '/gap/budget-cycle-predictor', label: 'Budget Cycle Predictor' },
+  { to: '/gap/legal-review-automator', label: 'Legal Review Automator' },
+  { to: '/gap/calendar-integration', label: 'Calendar Integration' },
+  { to: '/gap/email-sync', label: 'Email Sync' },
+  { to: '/gap/esign-integration', label: 'E-Sign Integration' },
+  { to: '/gap/revenue-forecast', label: 'Revenue Forecast' },
+  { to: '/gap/org-chart', label: 'Org Chart' },
+  { to: '/gap/call-recording', label: 'Call Recording Ingest' },
+  { to: '/cf/champion-map', label: 'CF: Champion Map' },
+  { to: '/cf/f100-playbook', label: 'CF: F100 Playbook' },
+  { to: '/cf/msa-redlines', label: 'CF: MSA Redlines' },
+  { to: '/cf/security-questionnaires', label: 'CF: Security Q&A' },
+  { to: '/cf/pilot-scorecards', label: 'CF: Pilot Scorecards' },
+];
+
 export default function Layout() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  // Apply pass 7: collapsible Gap/Cf Advisory group (16 items, collapsed by default)
+  const [advisoryOpen, setAdvisoryOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -70,6 +93,22 @@ export default function Layout() {
             {deepNavItems.map(({ to, icon: Icon, label }) => (
               <NavLink key={to} to={to} className={({ isActive }) => `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${isActive ? 'bg-emerald-700 text-white' : 'text-emerald-400 hover:text-white hover:bg-gray-800'}`}>
                 <Icon className="w-3.5 h-3.5" />
+                {label}
+              </NavLink>
+            ))}
+          </div>
+          <div className="pt-4 mt-4 border-t border-gray-800">
+            <button
+              type="button"
+              onClick={() => setAdvisoryOpen((v) => !v)}
+              className="w-full flex items-center justify-between px-3 mb-2 text-xs uppercase font-bold text-gray-500 tracking-wider hover:text-gray-300"
+            >
+              <span className="flex items-center gap-2"><Wand2 className="w-3.5 h-3.5" />AI Advisory ({gapNavItems.length})</span>
+              {advisoryOpen ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+            </button>
+            {advisoryOpen && gapNavItems.map(({ to, label }) => (
+              <NavLink key={to} to={to} className={({ isActive }) => `flex items-center gap-3 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${isActive ? 'bg-amber-700 text-white' : 'text-amber-300 hover:text-white hover:bg-gray-800'}`}>
+                <span className="w-3.5 h-3.5 flex-shrink-0" />
                 {label}
               </NavLink>
             ))}

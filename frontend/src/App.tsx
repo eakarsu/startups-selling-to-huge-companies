@@ -21,6 +21,28 @@ import PilotScorecardsPage from './pages/PilotScorecardsPage';
 import CompliancePosturePage from './pages/CompliancePosturePage';
 import CustomViewsPage from './pages/CustomViewsPage';
 
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+// Apply pass 7: wire previously-orphaned Gap (audit-gap advisory) pages
+import GapMultiThreadingCoach from './pages/GapMultiThreadingCoach';
+import GapProcurementDecoder from './pages/GapProcurementDecoder';
+import GapChampionIdentifier from './pages/GapChampionIdentifier';
+import GapBudgetCyclePredictor from './pages/GapBudgetCyclePredictor';
+import GapLegalReviewAutomator from './pages/GapLegalReviewAutomator';
+import GapCalendarIntegration from './pages/GapCalendarIntegration';
+import GapEmailSync from './pages/GapEmailSync';
+import GapEsignIntegration from './pages/GapEsignIntegration';
+import GapRevenueForecast from './pages/GapRevenueForecast';
+import GapOrgChart from './pages/GapOrgChart';
+import GapCallRecording from './pages/GapCallRecording';
+// Apply pass 7: wire previously-orphaned Cf (custom-feature advisory) pages
+import CfChampionMap from './pages/CfChampionMap';
+import CfF100Playbook from './pages/CfF100Playbook';
+import CfMsaRedlines from './pages/CfMsaRedlines';
+import CfSecurityQuestionnaires from './pages/CfSecurityQuestionnaires';
+import CfPilotScorecards from './pages/CfPilotScorecards';
+
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
   return token ? <>{children}</> : <Navigate to="/login" replace />;
@@ -30,6 +52,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route index element={<Navigate to="/dashboard" replace />} />
@@ -52,6 +77,24 @@ export default function App() {
           <Route path="pilot-scorecards" element={<PilotScorecardsPage />} />
           <Route path="compliance-posture" element={<CompliancePosturePage />} />
           <Route path="custom-views" element={<CustomViewsPage />} />
+          {/* Apply pass 7: Gap (audit-gap) AI advisory pages */}
+          <Route path="gap/multi-threading-coach" element={<GapMultiThreadingCoach />} />
+          <Route path="gap/procurement-decoder" element={<GapProcurementDecoder />} />
+          <Route path="gap/champion-identifier" element={<GapChampionIdentifier />} />
+          <Route path="gap/budget-cycle-predictor" element={<GapBudgetCyclePredictor />} />
+          <Route path="gap/legal-review-automator" element={<GapLegalReviewAutomator />} />
+          <Route path="gap/calendar-integration" element={<GapCalendarIntegration />} />
+          <Route path="gap/email-sync" element={<GapEmailSync />} />
+          <Route path="gap/esign-integration" element={<GapEsignIntegration />} />
+          <Route path="gap/revenue-forecast" element={<GapRevenueForecast />} />
+          <Route path="gap/org-chart" element={<GapOrgChart />} />
+          <Route path="gap/call-recording" element={<GapCallRecording />} />
+          {/* Apply pass 7: Cf (custom-feature) AI advisory pages */}
+          <Route path="cf/champion-map" element={<CfChampionMap />} />
+          <Route path="cf/f100-playbook" element={<CfF100Playbook />} />
+          <Route path="cf/msa-redlines" element={<CfMsaRedlines />} />
+          <Route path="cf/security-questionnaires" element={<CfSecurityQuestionnaires />} />
+          <Route path="cf/pilot-scorecards" element={<CfPilotScorecards />} />
         </Route>
       </Routes>
     </BrowserRouter>
