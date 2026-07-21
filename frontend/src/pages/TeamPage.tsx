@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, UserCheck } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { api } from '../api';
 import type { SalesTeamMember } from '../types';
 

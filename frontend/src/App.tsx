@@ -43,6 +43,20 @@ import CfMsaRedlines from './pages/CfMsaRedlines';
 import CfSecurityQuestionnaires from './pages/CfSecurityQuestionnaires';
 import CfPilotScorecards from './pages/CfPilotScorecards';
 
+export interface Deal {
+  id: string;
+  company: string;
+  companyColor: string;
+  companyInitials: string;
+  title: string;
+  value: number;
+  stage: string;
+  tier: 'F10' | 'F50' | 'F100';
+  probability: number;
+  expectedClose: string;
+  owner: string;
+}
+
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('token');
   return token ? <>{children}</> : <Navigate to="/login" replace />;

@@ -50,6 +50,7 @@ secrets.yaml
 # --- secrets: never commit ---
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 *.p12

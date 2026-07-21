@@ -19,7 +19,7 @@ app.use('/api/admin', require('./routes/sample_data'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 
 const PORT = process.env.PORT || 3014;
-app.listen(PORT, () => console.log(`EnterpriseOS backend running on port ${PORT}`));
+const HOST = process.env.HOST || '127.0.0.1';
 app.use('/api/gap-ai-multi-threading-coach', require('./routes/gap-ai-multi-threading-coach'));
 app.use('/api/gap-ai-procurement-decoder', require('./routes/gap-ai-procurement-decoder'));
 app.use('/api/gap-ai-champion-identifier', require('./routes/gap-ai-champion-identifier'));
@@ -53,3 +53,5 @@ app.use('/api/custom-views', require('./routes/customViews'));
 
 // 404 fallback for unmatched /api routes
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not Found', path: req.originalUrl }));
+
+app.listen(PORT, HOST, () => console.log(`EnterpriseOS backend running at http://${HOST}:${PORT}`));
