@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   role VARCHAR(50) DEFAULT 'user',
   created_at TIMESTAMP DEFAULT NOW()
 );
+CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique_idx ON users(email);
 
 CREATE TABLE IF NOT EXISTS companies (
   id SERIAL PRIMARY KEY,
