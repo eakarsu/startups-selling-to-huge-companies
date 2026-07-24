@@ -24,6 +24,11 @@ for dependency_dir in backend/node_modules frontend/node_modules; do
   }
 done
 
+for name in DATABASE_URL JWT_SECRET PROVISION_ADMIN_EMAIL PROVISION_ADMIN_PASSWORD OPENROUTER_API_KEY OPENROUTER_MODEL OPENROUTER_BASE_URL; do
+  [ -n "${!name:-}" ] || { echo "Error: $name is required." >&2; exit 1; }
+done
+[ "$OPENROUTER_BASE_URL" = "https://openrouter.ai/api/v1" ] || { echo "Error: OPENROUTER_BASE_URL must be canonical." >&2; exit 1; }
+
 for port in "$BACKEND_PORT" "$FRONTEND_PORT"; do
   if lsof -tiTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
     echo "Error: port $port is occupied; refusing to terminate another process." >&2
@@ -31,10 +36,8 @@ for port in "$BACKEND_PORT" "$FRONTEND_PORT"; do
   fi
 done
 
-if ! psql -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname = '$DB_NAME'" | grep -q 1; then
-  echo "Error: database '$DB_NAME' does not exist; provision and migrate an isolated database before startup." >&2
-  exit 1
-fi
+npm --prefix backend run migrate
+node backend/scripts/provision-runtime-admin.js
 
 (cd backend && exec env HOST="$BACKEND_HOST" PORT="$BACKEND_PORT" PGDATABASE="$DB_NAME" node server.js) &
 backend_pid=$!

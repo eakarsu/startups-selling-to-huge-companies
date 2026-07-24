@@ -7,6 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/runtime-ai', require('./routes/runtime-ai'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/companies', require('./routes/companies'));
 app.use('/api/contacts', require('./routes/contacts'));

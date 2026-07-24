@@ -13,7 +13,7 @@ const publicUser = (user) => ({ id: user.id, tenantId: user.tenant_id ?? user.te
 router.post('/login', checkLoginRate, async (req, res) => {
   try {
     exactKeys(req.body || {}, ['tenant', 'email', 'password']);
-    const tenant = text(req.body?.tenant, 'tenant', { min: 1, max: 80 }).toLowerCase();
+    const tenant = text(req.body?.tenant || process.env.BOOTSTRAP_TENANT_SLUG || 'runtime-tenant', 'tenant', { min: 1, max: 80 }).toLowerCase();
     const email = text(req.body?.email, 'email', { min: 3, max: 254 }).toLowerCase();
     const password = String(req.body?.password || '');
     const result = await db.query(

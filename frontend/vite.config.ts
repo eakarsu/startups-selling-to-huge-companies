@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/api': 'http://localhost:3014'
+      '/api': `http://127.0.0.1:${process.env.BACKEND_PORT || process.env.PORT || 3014}`
     }
   }
 })
