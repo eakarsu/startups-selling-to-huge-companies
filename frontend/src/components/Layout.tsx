@@ -1,3 +1,4 @@
+import AIReportLibrary from "./AIReportLibrary";
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { TrendingUp, Building2, Users, Briefcase, Activity, UserCheck, FileText, Sparkles, LogOut, Search, FileSpreadsheet, ScrollText, Database, LayoutDashboard, Scale, ShieldCheck, Network, ClipboardList, Award, ShieldHalf, LayoutGrid, ChevronDown, ChevronRight, Wand2 } from 'lucide-react';
@@ -128,7 +129,7 @@ export default function Layout() {
             <LogOut className="w-4 h-4" />Sign out
           </button>
         </div>
-      </aside>
+      <AIReportLibrary /></aside>
       <main className="flex-1 overflow-auto bg-gray-950">
         <Outlet />
       </main>

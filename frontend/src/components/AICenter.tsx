@@ -8,7 +8,7 @@ type TabId = 'scoring' | 'nextaction' | 'email' | 'research' | 'closelikelihood'
 export default function AICenter() {
   const [activeTab, setActiveTab] = useState<TabId>('scoring');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<unknown>(null);
 
   const [dealTitle, setDealTitle] = useState('');
   const [dealStage, setDealStage] = useState('negotiation');
@@ -27,7 +27,7 @@ export default function AICenter() {
 
   const call = async (fn: () => Promise<{ result: string }>) => {
     setLoading(true); setResult(null);
-    try { const data = await fn(); setResult(data.result || JSON.stringify(data, null, 2)); }
+    try { const data = await fn(); setResult(data.result ?? data); }
     catch (err: any) {
       if (err?.status === 503) setResult('AI service unavailable: ' + (err?.body?.detail || 'no API key configured'));
       else setResult('Error: ' + (err?.message || 'Could not get AI response'));
@@ -39,10 +39,13 @@ export default function AICenter() {
     setLoading(true); setResult(null);
     try {
       const data = await fn();
-      const human = data.result || '';
-      const meta = data.summary ? `\n\n**Summary:** ${JSON.stringify(data.summary)}` : '';
-      const list = Array.isArray(data.deals) ? `\n\n**Stalled Deals (${data.count}):**\n` + data.deals.slice(0, 25).map((d: any) => `- ${d.title} (${d.company_name}) — $${Number(d.value_usd||0).toLocaleString()} — ${d.days_since_touch ?? '?'}d since touch — stage ${d.stage}`).join('\n') + `\n\n**Triage:** ${data.triage || ''}` : '';
-      setResult([human, meta, list].filter(Boolean).join('') || JSON.stringify(data, null, 2));
+      setResult({
+        ...(data.result != null ? { analysis: data.result } : {}),
+        ...(data.summary != null ? { summary: data.summary } : {}),
+        ...(data.deals != null ? { deals: data.deals } : {}),
+        ...(data.count != null ? { count: data.count } : {}),
+        ...(data.triage != null ? { triage: data.triage } : {}),
+      });
     } catch (err: any) {
       if (err?.status === 503) setResult('AI service unavailable: ' + (err?.body?.detail || 'no API key configured'));
       else setResult('Error: ' + (err?.message || 'Could not get AI response'));

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Scale, RefreshCcw, AlertTriangle } from 'lucide-react';
-import { apiFetch } from '../api';
+import { apiFetchList } from '../api';
 
 type Clause = { id: number; topic: string; clause_name: string; default_text: string; startup_position: string; risk_level: string; notes: string };
 type Redline = { id: number; clause_id: number; company_id: number; company_name: string; company_tier: string; topic: string; clause_name: string; risk_level: string; buyer_position: string; startup_counter: string; outcome: string; negotiated_value: string; cycle_days: number };
@@ -23,10 +23,10 @@ export default function MsaRedlinesPage() {
     setLoading(true); setError('');
     try {
       const [cl, rl, tp, cy] = await Promise.all([
-        apiFetch('/deep-msa-redlines/clauses'),
-        apiFetch('/deep-msa-redlines/redlines'),
-        apiFetch('/deep-msa-redlines/by-topic'),
-        apiFetch('/deep-msa-redlines/cycle-analysis')
+        apiFetchList('/deep-msa-redlines/clauses'),
+        apiFetchList('/deep-msa-redlines/redlines'),
+        apiFetchList('/deep-msa-redlines/by-topic'),
+        apiFetchList('/deep-msa-redlines/cycle-analysis')
       ]);
       setClauses(cl); setRedlines(rl); setByTopic(tp); setCycleByCompany(cy);
     } catch (e: any) { setError(e.message || 'Failed to load'); }

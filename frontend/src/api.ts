@@ -22,6 +22,15 @@ export async function apiFetch(path: string, options?: RequestInit) {
   return res.json();
 }
 
+// List routes currently return arrays. Accept the paginated response shape as well,
+// but never let an error object reach a list component as though it were rows.
+export async function apiFetchList(path: string) {
+  const payload = await apiFetch(path);
+  const rows = Array.isArray(payload) ? payload : payload?.data;
+  if (!Array.isArray(rows)) throw new Error(`Invalid list response from ${path}`);
+  return rows;
+}
+
 export async function apiDownload(path: string, filename: string) {
   const token = localStorage.getItem('token');
   const res = await fetch(`${BASE}${path}`, {
@@ -39,43 +48,44 @@ export async function apiDownload(path: string, filename: string) {
 export const api = {
   login: (email: string, password: string) =>
     apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
+  demoLogin: () => apiFetch('/auth/demo-login', { method: 'POST' }),
   companies: {
-    list: () => apiFetch('/companies'),
+    list: () => apiFetchList('/companies'),
     get: (id: number) => apiFetch(`/companies/${id}`),
     create: (data: object) => apiFetch('/companies', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: object) => apiFetch(`/companies/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => apiFetch(`/companies/${id}`, { method: 'DELETE' })
   },
   contacts: {
-    list: () => apiFetch('/contacts'),
+    list: () => apiFetchList('/contacts'),
     get: (id: number) => apiFetch(`/contacts/${id}`),
     create: (data: object) => apiFetch('/contacts', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: object) => apiFetch(`/contacts/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => apiFetch(`/contacts/${id}`, { method: 'DELETE' })
   },
   deals: {
-    list: () => apiFetch('/deals'),
+    list: () => apiFetchList('/deals'),
     get: (id: number) => apiFetch(`/deals/${id}`),
     create: (data: object) => apiFetch('/deals', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: object) => apiFetch(`/deals/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => apiFetch(`/deals/${id}`, { method: 'DELETE' })
   },
   activities: {
-    list: () => apiFetch('/activities'),
+    list: () => apiFetchList('/activities'),
     get: (id: number) => apiFetch(`/activities/${id}`),
     create: (data: object) => apiFetch('/activities', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: object) => apiFetch(`/activities/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => apiFetch(`/activities/${id}`, { method: 'DELETE' })
   },
   team: {
-    list: () => apiFetch('/team'),
+    list: () => apiFetchList('/team'),
     get: (id: number) => apiFetch(`/team/${id}`),
     create: (data: object) => apiFetch('/team', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: object) => apiFetch(`/team/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: number) => apiFetch(`/team/${id}`, { method: 'DELETE' })
   },
   notes: {
-    list: () => apiFetch('/notes'),
+    list: () => apiFetchList('/notes'),
     get: (id: number) => apiFetch(`/notes/${id}`),
     create: (data: object) => apiFetch('/notes', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: number, data: object) => apiFetch(`/notes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
@@ -116,7 +126,7 @@ export const api = {
         .filter(([, v]) => v !== undefined && v !== '' && v !== null)
         .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
         .join('&') : '';
-      return apiFetch(`/utils/audit${qs ? '?' + qs : ''}`);
+      return apiFetchList(`/utils/audit${qs ? '?' + qs : ''}`);
     },
     auditWrite: (action: string, entity?: string, entity_id?: number, details?: string) =>
       apiFetch('/utils/audit', { method: 'POST', body: JSON.stringify({ action, entity, entity_id, details }) })

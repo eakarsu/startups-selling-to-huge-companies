@@ -35,7 +35,10 @@ async function callAI(userPrompt, systemPrompt = '') {
 
 function aiHandle(res, err) {
   if (err && err.code === 'AI_UNAVAILABLE') {
-    return res.status(503).json({ error: 'AI service unavailable', detail: err.message });
+    return res.json({ result: { status: 'unavailable', message: 'AI service is unavailable. Configure a provider to generate this report.' } });
+  }
+  if (err && err.code === '42P01') {
+    return res.json({ result: { status: 'unavailable', message: 'Required CRM data is unavailable for this report.' } });
   }
   return res.status(500).json({ error: err.message });
 }

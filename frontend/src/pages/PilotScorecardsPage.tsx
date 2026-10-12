@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Award, RefreshCcw, AlertTriangle } from 'lucide-react';
-import { apiFetch } from '../api';
+import { apiFetch, apiFetchList } from '../api';
 
 type PilotRow = { id: number; pilot_name: string; deal_id: number; deal_title: string; deal_value: number; deal_stage: string; company_id: number; company_name: string; company_tier: string; start_date: string; end_date: string; budget_usd: number; exec_sponsor: string; status: string; conversion_target_arr_usd: number; success_criteria: string; metric_count: number };
 type Metric = { id: number; metric_name: string; target_value: number; current_value: number; unit: string; threshold_pct: number; achievement_pct?: number; pass?: boolean };
@@ -23,9 +23,9 @@ export default function PilotScorecardsPage() {
     setLoading(true); setError('');
     try {
       const [p, f, r] = await Promise.all([
-        apiFetch('/deep-pilot-scorecards/pilots'),
+        apiFetchList('/deep-pilot-scorecards/pilots'),
         apiFetch('/deep-pilot-scorecards/conversion-funnel'),
-        apiFetch('/deep-pilot-scorecards/at-risk')
+        apiFetchList('/deep-pilot-scorecards/at-risk')
       ]);
       setPilots(p); setFunnel(f); setAtRisk(r);
       if (p.length && !activePilotId) setActivePilotId(p[0].id);

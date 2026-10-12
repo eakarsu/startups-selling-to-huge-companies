@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ShieldCheck, RefreshCcw } from 'lucide-react';
-import { apiFetch } from '../api';
+import { apiFetchList } from '../api';
 
 type Framework = { framework: string; total_questions: number; domains: number; total_responses: number; approved: number; avg_confidence: number | null; answer_bank_pct: number };
 type Question = { id: number; framework: string; question_code: string; domain: string; question_text: string; expected_artifact: string };
@@ -22,10 +22,10 @@ export default function SecurityQuestionnairePage() {
     setLoading(true); setError('');
     try {
       const [fw, dc, q, r] = await Promise.all([
-        apiFetch('/deep-security-questionnaires/frameworks'),
-        apiFetch('/deep-security-questionnaires/domain-coverage'),
-        apiFetch('/deep-security-questionnaires/questions'),
-        apiFetch('/deep-security-questionnaires/responses')
+        apiFetchList('/deep-security-questionnaires/frameworks'),
+        apiFetchList('/deep-security-questionnaires/domain-coverage'),
+        apiFetchList('/deep-security-questionnaires/questions'),
+        apiFetchList('/deep-security-questionnaires/responses')
       ]);
       setFrameworks(fw); setDomainCoverage(dc); setQuestions(q); setResponses(r);
       if (!activeFramework && fw.length) setActiveFramework(fw[0].framework);

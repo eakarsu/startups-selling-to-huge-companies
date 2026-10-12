@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ClipboardList, RefreshCcw, Clock } from 'lucide-react';
-import { apiFetch, api } from '../api';
+import { apiFetch, apiFetchList, api } from '../api';
 
 type PlaybookCompany = { id: number; name: string; tier: string; industry: string; revenue_billions: number | null; stage_count: number; total_typical_days: number; top_signing_threshold_usd: number | null };
 type Stage = { id: number; stage_order: number; stage_name: string; owner_role: string; typical_duration_days: number; required_artifacts: string; signing_threshold_usd: number; notes: string; progress?: { status: string; entered_at: string | null; completed_at: string | null; blocker: string | null } };
@@ -27,9 +27,9 @@ export default function ProcurementPlaybookPage() {
     setLoading(true); setError('');
     try {
       const [comps, blk, crit, dealsList] = await Promise.all([
-        apiFetch('/deep-procurement-playbook/companies'),
-        apiFetch('/deep-procurement-playbook/stages-blocked'),
-        apiFetch('/deep-procurement-playbook/critical-path'),
+        apiFetchList('/deep-procurement-playbook/companies'),
+        apiFetchList('/deep-procurement-playbook/stages-blocked'),
+        apiFetchList('/deep-procurement-playbook/critical-path'),
         api.deals.list()
       ]);
       setCompanies(comps); setBlocked(blk); setCritical(crit); setDeals(dealsList);

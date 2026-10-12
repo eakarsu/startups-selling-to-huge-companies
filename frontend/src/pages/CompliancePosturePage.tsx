@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ShieldHalf, RefreshCcw, TrendingUp } from 'lucide-react';
-import { apiFetch } from '../api';
+import { apiFetch, apiFetchList } from '../api';
 
 type Cert = { id: number; framework: string; status: string; auditor: string; issued_date: string | null; expires_date: string | null; scope: string; evidence_link: string; cost_usd: number; notes: string };
 type Gap = { framework: string; startup_status: string; expires_date: string | null; cost_usd: number; deals_requiring: number; deals_blocked: number; blocked_pipeline_usd: number; total_pipeline_usd: number };
@@ -21,9 +21,9 @@ export default function CompliancePosturePage() {
     setLoading(true); setError('');
     try {
       const [c, g, r, e] = await Promise.all([
-        apiFetch('/deep-compliance-posture/certifications'),
-        apiFetch('/deep-compliance-posture/gap-vs-deals'),
-        apiFetch('/deep-compliance-posture/cost-vs-revenue'),
+        apiFetchList('/deep-compliance-posture/certifications'),
+        apiFetchList('/deep-compliance-posture/gap-vs-deals'),
+        apiFetchList('/deep-compliance-posture/cost-vs-revenue'),
         apiFetch('/deep-compliance-posture/expiring?days=180')
       ]);
       setCerts(c); setGaps(g); setRois(r); setExpiring(e);

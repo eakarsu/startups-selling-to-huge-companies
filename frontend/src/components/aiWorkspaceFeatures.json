@@ -1,0 +1,114 @@
+[
+  {
+    "name": "CfChampionMap",
+    "id": "cf-champion-map",
+    "title": "Multi-Threaded Champion Map",
+    "description": "Prepare a professional advisory report for multi-threaded champion map using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfF100Playbook",
+    "id": "cf-f100-playbook",
+    "title": "F100 Procurement Playbook Library",
+    "description": "Prepare a professional advisory report for f100 procurement playbook library using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfMsaRedlines",
+    "id": "cf-msa-redlines",
+    "title": "AI MSA Redline Drafts",
+    "description": "Prepare a professional advisory report for ai msa redline drafts using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfPilotScorecards",
+    "id": "cf-pilot-scorecards",
+    "title": "Pilot Success Scorecards",
+    "description": "Prepare a professional advisory report for pilot success scorecards using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfSecurityQuestionnaires",
+    "id": "cf-security-questionnaires",
+    "title": "AI Security Questionnaire Drafts",
+    "description": "Prepare a professional advisory report for ai security questionnaire drafts using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapBudgetCyclePredictor",
+    "id": "gap-ai-budget-cycle-predictor",
+    "title": "Budget Cycle Predictor",
+    "description": "Prepare a professional advisory report for budget cycle predictor using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapCalendarIntegration",
+    "id": "gap-nonai-calendar-integration",
+    "title": "Calendar Integration",
+    "description": "Prepare a professional advisory report for calendar integration using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapCallRecording",
+    "id": "gap-nonai-call-recording",
+    "title": "Call Recording Ingest",
+    "description": "Prepare a professional advisory report for call recording ingest using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapChampionIdentifier",
+    "id": "gap-ai-champion-identifier",
+    "title": "Champion Identifier",
+    "description": "Prepare a professional advisory report for champion identifier using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapEmailSync",
+    "id": "gap-nonai-email-sync",
+    "title": "Email Sync (IMAP/Gmail)",
+    "description": "Prepare a professional advisory report for email sync (imap/gmail) using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapEsignIntegration",
+    "id": "gap-nonai-esign-integration",
+    "title": "E-Sign Integration",
+    "description": "Prepare a professional advisory report for e-sign integration using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapLegalReviewAutomator",
+    "id": "gap-ai-legal-review-automator",
+    "title": "Legal Review Automator",
+    "description": "Prepare a professional advisory report for legal review automator using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapMultiThreadingCoach",
+    "id": "gap-ai-multi-threading-coach",
+    "title": "Multi-Threading Coach",
+    "description": "Prepare a professional advisory report for multi-threading coach using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapOrgChart",
+    "id": "gap-nonai-org-chart",
+    "title": "Org-Chart Relationships",
+    "description": "Prepare a professional advisory report for org-chart relationships using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapProcurementDecoder",
+    "id": "gap-ai-procurement-decoder",
+    "title": "Procurement Process Decoder",
+    "description": "Prepare a professional advisory report for procurement process decoder using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapRevenueForecast",
+    "id": "gap-nonai-revenue-forecast",
+    "title": "Revenue Forecast Roll-Up",
+    "description": "Prepare a professional advisory report for revenue forecast roll-up using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  }
+]

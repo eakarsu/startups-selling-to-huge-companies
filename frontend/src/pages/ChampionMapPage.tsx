@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Network, RefreshCcw, AlertCircle } from 'lucide-react';
-import { apiFetch, api } from '../api';
+import { apiFetch, apiFetchList, api } from '../api';
 
 type DealCoverage = { deal_id: number; title: string; value_usd: number; stage: string; probability: number; company_id: number; company_name: string; tier: string; contacts: number; decision_makers: number; distinct_roles_covered: number; single_thread_risk: boolean };
 type Score = { company_id: number; total_contacts: number; contacts_with_role: number; covered_roles: { role: string; weight: number }[]; missing_roles: string[]; coverage_pct: number; strength_pct: number; verdict: string };
@@ -23,7 +23,7 @@ export default function ChampionMapPage() {
     setLoading(true); setError('');
     try {
       const [cov, comps] = await Promise.all([
-        apiFetch('/deep-champion-map/coverage-summary'),
+        apiFetchList('/deep-champion-map/coverage-summary'),
         api.companies.list()
       ]);
       setCoverage(cov);

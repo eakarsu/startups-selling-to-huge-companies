@@ -107,44 +107,44 @@ function futureTimestamp(daysAhead) {
   return d.toISOString();
 }
 
-async function insertCompanies(count) {
+async function insertCompanies(count, tenantId) {
   const rows = shuffle(F500_COMPANIES).slice(0, count);
   let inserted = 0;
   for (const c of rows) {
     // Avoid dup-name explosion: append a short suffix so re-running adds new rows.
     const suffix = ` (Sample ${Date.now().toString().slice(-5)}-${rand(10, 99)})`;
     await db.query(
-      `INSERT INTO companies (name, industry, revenue_billions, employee_count, tier, website, hq_city, hq_country, stock_symbol, founded_year, notes)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
-      [c.name + suffix, c.industry, c.revenue_billions, c.employee_count, c.tier, c.website, c.hq_city, c.hq_country, c.stock_symbol, c.founded_year, c.notes]
+      `INSERT INTO companies (tenant_id, name, industry, revenue_billions, employee_count, tier, website, hq_city, hq_country, stock_symbol, founded_year, notes)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+      [tenantId, c.name + suffix, c.industry, c.revenue_billions, c.employee_count, c.tier, c.website, c.hq_city, c.hq_country, c.stock_symbol, c.founded_year, c.notes]
     );
     inserted++;
   }
   return inserted;
 }
 
-async function getCompanyIds(limit) {
-  const r = await db.query('SELECT id FROM companies ORDER BY id DESC LIMIT $1', [limit]);
+async function getCompanyIds(limit, tenantId) {
+  const r = await db.query('SELECT id FROM companies WHERE tenant_id=$1 AND archived_at IS NULL ORDER BY id DESC LIMIT $2', [tenantId, limit]);
   return r.rows.map(x => x.id);
 }
-async function getDealIds(limit) {
-  const r = await db.query('SELECT id FROM deals ORDER BY id DESC LIMIT $1', [limit]);
+async function getDealIds(limit, tenantId) {
+  const r = await db.query('SELECT id FROM deals WHERE tenant_id=$1 AND archived_at IS NULL ORDER BY id DESC LIMIT $2', [tenantId, limit]);
   return r.rows.map(x => x.id);
 }
-async function getContactIds(limit) {
-  const r = await db.query('SELECT id FROM contacts ORDER BY id DESC LIMIT $1', [limit]);
+async function getContactIds(limit, tenantId) {
+  const r = await db.query('SELECT ct.id FROM contacts ct JOIN companies c ON c.id=ct.company_id WHERE c.tenant_id=$1 AND c.archived_at IS NULL ORDER BY ct.id DESC LIMIT $2', [tenantId, limit]);
   return r.rows.map(x => x.id);
 }
 
-async function insertContacts(count, userId) {
-  const companyIds = await getCompanyIds(50);
+async function insertContacts(count, userId, tenantId) {
+  const companyIds = await getCompanyIds(50, tenantId);
   if (!companyIds.length) {
     // Bootstrap with one company so contacts have a parent.
     const c = pick(F500_COMPANIES);
     const r = await db.query(
-      `INSERT INTO companies (name, industry, revenue_billions, employee_count, tier, website, hq_city, hq_country, stock_symbol, founded_year, notes)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`,
-      [c.name + ' (Sample)', c.industry, c.revenue_billions, c.employee_count, c.tier, c.website, c.hq_city, c.hq_country, c.stock_symbol, c.founded_year, c.notes]
+      `INSERT INTO companies (tenant_id, name, industry, revenue_billions, employee_count, tier, website, hq_city, hq_country, stock_symbol, founded_year, notes)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING id`,
+      [tenantId, c.name + ' (Sample)', c.industry, c.revenue_billions, c.employee_count, c.tier, c.website, c.hq_city, c.hq_country, c.stock_symbol, c.founded_year, c.notes]
     );
     companyIds.push(r.rows[0].id);
   }
@@ -176,11 +176,11 @@ async function insertContacts(count, userId) {
   return inserted;
 }
 
-async function insertDeals(count, userId) {
-  const companyIds = await getCompanyIds(50);
+async function insertDeals(count, userId, tenantId) {
+  const companyIds = await getCompanyIds(50, tenantId);
   if (!companyIds.length) {
-    await insertCompanies(3);
-    companyIds.push(...(await getCompanyIds(3)));
+    await insertCompanies(3, tenantId);
+    companyIds.push(...(await getCompanyIds(3, tenantId)));
   }
   let inserted = 0;
   for (let i = 0; i < count; i++) {
@@ -193,9 +193,10 @@ async function insertDeals(count, userId) {
     const value = rand(50, 2500) * 1000; // $50K – $2.5M
     const arr = Math.round(value * (rand(60, 100) / 100));
     await db.query(
-      `INSERT INTO deals (company_id, title, value_usd, stage, probability, expected_close, owner_id, last_activity_at, next_action, arr_usd)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+      `INSERT INTO deals (tenant_id, company_id, title, value_usd, stage, probability, expected_close, owner_id, last_activity_at, next_action, arr_usd)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
       [
+        tenantId,
         pick(companyIds),
         pick(DEAL_TITLES),
         value,
@@ -213,13 +214,13 @@ async function insertDeals(count, userId) {
   return inserted;
 }
 
-async function insertActivities(count, userId) {
-  let dealIds = await getDealIds(50);
+async function insertActivities(count, userId, tenantId) {
+  let dealIds = await getDealIds(50, tenantId);
   if (!dealIds.length) {
-    await insertDeals(3, userId);
-    dealIds = await getDealIds(3);
+    await insertDeals(3, userId, tenantId);
+    dealIds = await getDealIds(3, tenantId);
   }
-  const contactIds = await getContactIds(50);
+  const contactIds = await getContactIds(50, tenantId);
   let inserted = 0;
   for (let i = 0; i < count; i++) {
     const completed = Math.random() < 0.6;
@@ -273,11 +274,11 @@ async function insertTeam(count) {
   return inserted;
 }
 
-async function insertNotes(count, userId) {
-  let dealIds = await getDealIds(50);
+async function insertNotes(count, userId, tenantId) {
+  let dealIds = await getDealIds(50, tenantId);
   if (!dealIds.length) {
-    await insertDeals(3, userId);
-    dealIds = await getDealIds(3);
+    await insertDeals(3, userId, tenantId);
+    dealIds = await getDealIds(3, tenantId);
   }
   let inserted = 0;
   for (let i = 0; i < count; i++) {
@@ -298,12 +299,12 @@ async function insertNotes(count, userId) {
 }
 
 const HANDLERS = {
-  companies:  ({ count })            => insertCompanies(count),
-  contacts:   ({ count, userId })    => insertContacts(count, userId),
-  deals:      ({ count, userId })    => insertDeals(count, userId),
-  activities: ({ count, userId })    => insertActivities(count, userId),
+  companies:  ({ count, tenantId })            => insertCompanies(count, tenantId),
+  contacts:   ({ count, userId, tenantId })    => insertContacts(count, userId, tenantId),
+  deals:      ({ count, userId, tenantId })    => insertDeals(count, userId, tenantId),
+  activities: ({ count, userId, tenantId })    => insertActivities(count, userId, tenantId),
   team:       ({ count })            => insertTeam(count),
-  notes:      ({ count, userId })    => insertNotes(count, userId)
+  notes:      ({ count, userId, tenantId })    => insertNotes(count, userId, tenantId)
 };
 
 router.post('/sample-data/:entity', auth, async (req, res) => {
@@ -317,7 +318,7 @@ router.post('/sample-data/:entity', auth, async (req, res) => {
   }
   const count = rand(5, 10);
   try {
-    const inserted = await handler({ count, userId: req.user && req.user.id });
+    const inserted = await handler({ count, userId: req.user.id, tenantId: req.user.tenantId });
     return res.json({ inserted, entity });
   } catch (err) {
     return res.status(500).json({ error: err.message, entity });

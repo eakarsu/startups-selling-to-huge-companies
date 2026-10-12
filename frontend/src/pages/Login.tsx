@@ -10,15 +10,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const completeLogin = (data: { token: string; user: unknown }) => {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data.user));
+    navigate('/');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      const data = await api.login(email, password);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/');
+      completeLogin(await api.login(email, password));
     } catch {
       setError('Invalid credentials');
     } finally {
@@ -26,11 +29,6 @@ export default function Login() {
     }
   };
 
-  const handleDemo = () => {
-    setEmail(import.meta.env.VITE_DEMO_EMAIL || '');
-    setPassword(import.meta.env.VITE_DEMO_PASSWORD || '');
-    setError('');
-  };
 
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
@@ -57,8 +55,14 @@ export default function Login() {
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
-          <button onClick={handleDemo} className="mt-3 w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2.5 rounded-lg transition-colors border border-gray-700">
-            Auto Fill Demo Credentials
+          <button type="button" disabled={loading} onClick={async () => {
+            setLoading(true);
+            setError('');
+            try { completeLogin(await api.demoLogin()); }
+            catch (err: any) { setError(err?.body?.error || 'Demo login is unavailable.'); }
+            finally { setLoading(false); }
+          }} className="mt-3 w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2.5 rounded-lg transition-colors border border-gray-700">
+            {loading ? 'Signing in...' : 'Log In as Demo'}
           </button>
         </div>
       </div>
