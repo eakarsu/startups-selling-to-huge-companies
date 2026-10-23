@@ -3,7 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-app.use(cors());
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) throw new Error('JWT_SECRET must be at least 32 characters');
+const allowedOrigins = String(process.env.CORS_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((o) => o.trim()).filter(Boolean);
+app.use(cors({ credentials: false, origin(origin, callback) { if (!origin || allowedOrigins.includes(origin)) return callback(null, true); return callback(new Error('Origin is not allowed')); } }));
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth'));
@@ -12,6 +14,7 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/companies', require('./routes/companies'));
 app.use('/api/contacts', require('./routes/contacts'));
 app.use('/api/deals', require('./routes/deals'));
+app.use('/api/wave3', require('./routes/wave3'));
 app.use('/api/activities', require('./routes/activities'));
 app.use('/api/team', require('./routes/team'));
 app.use('/api/notes', require('./routes/notes'));
